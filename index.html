@@ -187,6 +187,51 @@
     /* Name story */
     #nome { background: var(--sand-light); }
 
+    /* Newsletter CTA */
+    #aggiornamenti { text-align: center; }
+    #aggiornamenti .lead { margin: 10px auto 0; }
+    .nl-form {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 26px auto 0;
+      max-width: 520px;
+    }
+    .nl-form input[type="email"] {
+      flex: 1 1 260px;
+      padding: 13px 18px;
+      font: inherit;
+      font-size: 16px;
+      color: var(--ink);
+      background: var(--paper);
+      border: 1px solid rgba(124, 63, 33, .25);
+      border-radius: 999px;
+      outline: none;
+      min-height: 48px;
+    }
+    .nl-form input[type="email"]:focus { border-color: var(--red); }
+    .nl-form button {
+      font: inherit;
+      font-weight: 500;
+      font-size: 16px;
+      padding: 13px 26px;
+      border: none;
+      border-radius: 999px;
+      background: var(--red);
+      color: #fff;
+      cursor: pointer;
+      min-height: 48px;
+      transition: transform .15s ease;
+    }
+    .nl-form button:hover { transform: translateY(-2px); }
+    .nl-form button:disabled { opacity: .6; cursor: wait; transform: none; }
+    .nl-note { font-size: 13px; color: var(--muted); margin-top: 12px; }
+    .nl-msg { margin-top: 14px; font-size: 15px; font-weight: 500; min-height: 1.4em; }
+    .nl-msg.ok { color: var(--brown); }
+    .nl-msg.err { color: var(--red); }
+    .nl-hp { position: absolute; left: -9999px; }
+
     footer {
       background: var(--dark);
       color: var(--muted-on-dark);
@@ -383,6 +428,25 @@
       </div>
     </section>
 
+    <section id="aggiornamenti">
+      <div class="wrap">
+        <p class="kicker reveal">Resta in contatto</p>
+        <h2 class="reveal">Ti va di sapere quando apriamo?</h2>
+        <p class="lead reveal">Musubi sta muovendo i primi passi. Se vuoi, lasciaci la tua email: ti
+          scriveremo quando ci saranno novit&agrave; &mdash; poche volte, e solo per cose che contano.</p>
+        <form class="nl-form reveal" id="nlform" novalidate>
+          <label class="nl-hp" aria-hidden="true">Non compilare questo campo
+            <input type="text" name="website" tabindex="-1" autocomplete="off" />
+          </label>
+          <input type="email" name="email" required placeholder="la tua email"
+            aria-label="Il tuo indirizzo email" autocomplete="email" />
+          <button type="submit">Tienimi al corrente</button>
+        </form>
+        <p class="nl-msg" id="nlmsg" role="status" aria-live="polite"></p>
+        <p class="nl-note">Niente spam: solo aggiornamenti su Musubi, e puoi cancellarti quando vuoi.</p>
+      </div>
+    </section>
+
   </main>
 
   <footer>
@@ -393,6 +457,50 @@
 
   <script>
     (function () {
+      // Newsletter provider endpoint (MailerLite/Brevo embedded-form URL).
+      // Empty string = not configured yet: the form falls back to a mailto,
+      // so the CTA works from day one and upgrades by pasting the URL here.
+      var NEWSLETTER_ENDPOINT = '';
+      var NEWSLETTER_FALLBACK_EMAIL = 'ciao@musubi.garden';
+
+      var nlform = document.getElementById('nlform');
+      var nlmsg = document.getElementById('nlmsg');
+      nlform.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var email = nlform.email.value.trim();
+        if (nlform.website.value) return;
+        if (!email || email.indexOf('@') < 1) {
+          nlmsg.textContent = 'Controlla l\'indirizzo email e riprova.';
+          nlmsg.className = 'nl-msg err';
+          return;
+        }
+        if (!NEWSLETTER_ENDPOINT) {
+          window.location.href = 'mailto:' + NEWSLETTER_FALLBACK_EMAIL +
+            '?subject=' + encodeURIComponent('Tienimi al corrente su Musubi') +
+            '&body=' + encodeURIComponent('Ciao! Vorrei ricevere aggiornamenti su Musubi.\n\n' + email);
+          nlmsg.textContent = 'Ti abbiamo aperto l\'email: basta un invio e sei dei nostri.';
+          nlmsg.className = 'nl-msg ok';
+          return;
+        }
+        var btn = nlform.querySelector('button');
+        btn.disabled = true;
+        var body = new URLSearchParams();
+        body.append('email', email);
+        body.append('fields[email]', email);
+        fetch(NEWSLETTER_ENDPOINT, { method: 'POST', body: body, mode: 'cors' })
+          .then(function (r) {
+            if (!r.ok) throw new Error('http ' + r.status);
+            nlform.reset();
+            nlmsg.textContent = 'Fatto! Controlla la posta per confermare l\'iscrizione.';
+            nlmsg.className = 'nl-msg ok';
+          })
+          .catch(function () {
+            nlmsg.textContent = 'Qualcosa non ha funzionato: riprova tra un momento.';
+            nlmsg.className = 'nl-msg err';
+          })
+          .finally(function () { btn.disabled = false; });
+      });
+
       var MIN_SHOW = 1600;
       var start = Date.now();
       function hideLoader() {
