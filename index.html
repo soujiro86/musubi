@@ -83,9 +83,45 @@
       gap: 10px;
     }
     .nav .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 20px; color: var(--brown); text-decoration: none; }
-    .nav nav { margin-left: auto; display: flex; gap: 20px; flex-wrap: wrap; }
+    .nav nav { margin-left: auto; display: flex; gap: 20px; }
     .nav nav a { color: var(--brown); text-decoration: none; font-size: 15px; }
     .nav nav a:hover { color: var(--red); }
+
+    #burger {
+      display: none;
+      margin-left: auto;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      color: var(--brown);
+    }
+    #burger svg { display: block; }
+    #burger .icon-close { display: none; }
+    #burger[aria-expanded="true"] .icon-open { display: none; }
+    #burger[aria-expanded="true"] .icon-close { display: block; }
+
+    @media (max-width: 720px) {
+      #burger { display: block; }
+      .nav nav {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        gap: 0;
+        background: var(--sand-light);
+        border-bottom: 1px solid rgba(124, 63, 33, .15);
+        box-shadow: 0 8px 20px rgba(63, 45, 29, .08);
+      }
+      .nav nav.open { display: flex; }
+      .nav nav a {
+        padding: 14px 24px;
+        font-size: 16px;
+        border-top: 1px solid rgba(124, 63, 33, .08);
+      }
+    }
 
     /* ---------- Sections ---------- */
     section { padding: 72px 20px; }
@@ -148,8 +184,10 @@
     #missione blockquote em { color: var(--red); font-style: normal; }
     #missione .lead { margin: 18px auto 0; }
 
+    /* Name story */
+    #nome { background: var(--sand-light); }
+
     /* Garden / future */
-    #giardino { background: var(--sand-light); }
     #giardino .wrap { display: flex; flex-wrap: wrap; gap: 36px; align-items: center; }
     #giardino .txt { flex: 1 1 380px; }
     #giardino .art { flex: 0 1 260px; margin: 0 auto; }
@@ -207,11 +245,15 @@
         <svg width="30" height="28" viewBox="0 0 260 240" aria-hidden="true" style="stroke:#c1272d; stroke-width:18; fill:none; stroke-linecap:round;"><use href="#knot" /></svg>
         musubi
       </a>
-      <nav aria-label="Sezioni">
-        <a href="#nome">Il nome</a>
+      <button id="burger" aria-expanded="false" aria-controls="mainnav" aria-label="Apri il menu">
+        <svg class="icon-open" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <svg class="icon-close" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <nav id="mainnav" aria-label="Sezioni">
         <a href="#giocatori">Giocatori</a>
         <a href="#organizzatori">Organizzatori</a>
         <a href="#missione">Missione</a>
+        <a href="#nome">Il nome</a>
       </nav>
     </div>
   </header>
@@ -238,12 +280,81 @@
         </svg>
         <h1>musubi</h1>
         <p class="tagline">pi&ugrave; giochi insieme, pi&ugrave; il legame si stringe</p>
-        <p class="lead">La piattaforma che fa incontrare i giocatori ai tavoli di associazioni, fiere e
-          negozi ludici. Trovi il tavolo giusto, prenoti il posto, e il resto succede da s&eacute;.</p>
+        <p class="lead">Musubi aiuta giocatori e organizzatori a incontrarsi: i tavoli di associazioni,
+          fiere e negozi ludici in un posto solo, con il tuo posto che ti aspetta.</p>
         <div class="cta-row">
           <a class="btn btn-red" href="#giocatori">Sono un giocatore</a>
           <a class="btn btn-ghost" href="#organizzatori">Organizzo eventi</a>
         </div>
+      </div>
+    </section>
+
+    <section id="giocatori">
+      <div class="wrap">
+        <p class="kicker reveal">Per i giocatori</p>
+        <h2 class="reveal">Trova il tuo tavolo</h2>
+        <p class="lead reveal">German, ameritrash, gioco di ruolo o sci-fi: qualunque cosa ti piaccia
+          giocare, c'&egrave; probabilmente un tavolo che ti sta cercando.</p>
+        <div class="grid">
+          <div class="card reveal">
+            <h3>Sfoglia gli eventi</h3>
+            <p>I tavoli in programma, filtrabili per gioco, genere, difficolt&agrave; e orario: cos&igrave;
+              scegli con calma quello adatto a te.</p>
+          </div>
+          <div class="card reveal">
+            <h3>Prenota il posto</h3>
+            <p>Se c'&egrave; un posto libero lo blocchi in un momento, e lo ritrovi al tuo arrivo.</p>
+          </div>
+          <div class="card reveal">
+            <h3>Porta chi vuoi con te</h3>
+            <p>Dal tuo profilo gestisci anche le prenotazioni di famiglia e amici: una registrazione,
+              tutto il gruppo al tavolo.</p>
+          </div>
+          <div class="card reveal">
+            <h3>Check-in senza pensieri</h3>
+            <p>All'arrivo la registrazione &egrave; questione di un attimo, e il tavolo sa che ci sei.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="organizzatori">
+      <div class="wrap">
+        <p class="kicker reveal">Per gli organizzatori</p>
+        <h2 class="reveal">Un pannello unico per i tuoi eventi</h2>
+        <p class="lead reveal">Associazioni, fiere e negozi: tavoli, turni e prenotazioni si gestiscono da
+          un unico posto, cos&igrave; il tempo va dove serve &mdash; a far giocare le persone.</p>
+        <div class="grid">
+          <div class="card reveal">
+            <h3>Eventi e turni</h3>
+            <p>Calendario a fasce orarie, tavoli con posti limitati e varianti: il programma resta
+              leggibile anche quando cambia.</p>
+          </div>
+          <div class="card reveal">
+            <h3>Sale e tavoli</h3>
+            <p>Ogni evento &egrave; assegnato alla sua sala e al suo tavolo: chi organizza sa dove si
+              gioca, e chi arriva anche.</p>
+          </div>
+          <div class="card reveal">
+            <h3>Biglietti e bundle</h3>
+            <p>Ingressi, pacchetti e gadget con pagamento online: ogni ordine resta tracciato.</p>
+          </div>
+          <div class="card reveal">
+            <h3>La situazione, sempre chiara</h3>
+            <p>Prenotazioni, presenze e statistiche aggiornate: sai come sta andando, mentre sta andando.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="missione">
+      <div class="wrap">
+        <p class="kicker reveal">La missione</p>
+        <blockquote class="reveal">Uno strumento di connessione per le nicchie e le piccole organizzazioni,
+          <em>pensato per costare il meno possibile a chi lo usa</em>.</blockquote>
+        <p class="lead reveal">Musubi nasce dentro una convention no-profit, non in una startup: sappiamo
+          cosa vuol dire far quadrare i conti di un'associazione, e la piattaforma &egrave; costruita
+          attorno a quel vincolo.</p>
       </div>
     </section>
 
@@ -277,84 +388,15 @@
       </div>
     </section>
 
-    <section id="giocatori">
-      <div class="wrap">
-        <p class="kicker reveal">Per i giocatori</p>
-        <h2 class="reveal">Trova il tuo tavolo</h2>
-        <p class="lead reveal">German, ameritrash, gioco di ruolo o sci-fi: qualunque cosa giochi, da qualche
-          parte c'&egrave; un tavolo con un posto per te.</p>
-        <div class="grid">
-          <div class="card reveal">
-            <h3>Scopri gli eventi</h3>
-            <p>Tutti i tavoli delle associazioni, fiere e negozi vicini a te: filtrati per gioco, genere,
-              difficolt&agrave; e orario.</p>
-          </div>
-          <div class="card reveal">
-            <h3>Prenota il posto</h3>
-            <p>Un tap e il posto al tavolo &egrave; tuo. Niente code, niente fogli di carta, niente "torna
-              pi&ugrave; tardi".</p>
-          </div>
-          <div class="card reveal">
-            <h3>Porta il tuo gruppo</h3>
-            <p>Gestisci le prenotazioni di famiglia e amici da un unico profilo: iscrivi tutti, pensa solo a
-              giocare.</p>
-          </div>
-          <div class="card reveal">
-            <h3>Check-in al volo</h3>
-            <p>Arrivi, ti registri, ti siedi. Il tavolo sa che stai arrivando e il posto ti aspetta.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="organizzatori">
-      <div class="wrap">
-        <p class="kicker reveal">Per gli organizzatori</p>
-        <h2 class="reveal">Il backoffice che ti toglie il caos</h2>
-        <p class="lead reveal">Associazioni, fiere e negozi: gestite tavoli, turni e prenotazioni da un unico
-          pannello, e dedicatevi a quello che conta &mdash; far giocare le persone.</p>
-        <div class="grid">
-          <div class="card reveal">
-            <h3>Eventi e turni</h3>
-            <p>Calendario a fasce orarie, tavoli con posti limitati, variazioni e liste d'attesa gestite in
-              automatico.</p>
-          </div>
-          <div class="card reveal">
-            <h3>Sale e tavoli</h3>
-            <p>Mappa delle sale e assegnazione dei tavoli: ogni evento sa dove si gioca, e i giocatori anche.</p>
-          </div>
-          <div class="card reveal">
-            <h3>Biglietti e bundle</h3>
-            <p>Ingressi, pacchetti e gadget con pagamento online integrato: l'incasso &egrave; tracciato, la
-              cassa respira.</p>
-          </div>
-          <div class="card reveal">
-            <h3>La situazione, live</h3>
-            <p>Presenze, check-in e statistiche in tempo reale: sai sempre quanti stanno giocando e dove.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="missione">
-      <div class="wrap">
-        <p class="kicker reveal">La missione</p>
-        <blockquote class="reveal">Uno strumento di connessione per le nicchie e le piccole organizzazioni,
-          <em>cos&igrave; economico che nessuna associazione debba rinunciarci</em>.</blockquote>
-        <p class="lead reveal">Musubi nasce dentro una convention no-profit, non in una startup: sappiamo cosa
-          significa far quadrare i conti di un'associazione. Per questo la piattaforma &egrave; pensata per
-          costare il meno possibile a chi organizza.</p>
-      </div>
-    </section>
-
     <section id="giardino">
       <div class="wrap">
         <div class="txt">
           <p class="kicker reveal">Il futuro</p>
           <h2 class="reveal">Il giardino dei legami</h2>
-          <p class="lead reveal">I nodi che si formano ai tavoli non si sciolgono quando finisce l'evento. Stiamo
-            coltivando il passo successivo: <strong>connessioni spontanee tra giocatori</strong> &mdash; trova chi
-            gioca alle tue stesse cose, anche senza un evento organizzato.</p>
+          <p class="lead reveal">I nodi che si formano ai tavoli non si sciolgono quando finisce l'evento.
+            Il passo successivo su cui stiamo lavorando: <strong>connessioni spontanee tra
+            giocatori</strong> &mdash; trovare chi gioca alle tue stesse cose, anche senza un evento
+            organizzato.</p>
         </div>
         <div class="art" aria-hidden="true">
           <svg width="220" height="203" viewBox="0 0 260 240" style="opacity:.9">
@@ -374,7 +416,7 @@
 
   <footer>
     <div>&copy; 2026 Musubi &mdash; il legame si fa al tavolo</div>
-    <div class="domains">musubi.events &middot; musubi.garden</div>
+    <div class="domains">musubi.garden</div>
     <div class="origin">Nato come KOTR, il gestionale della convention che ci ha fatto incontrare.</div>
   </footer>
 
@@ -390,6 +432,25 @@
       }
       if (document.readyState === 'complete') hideLoader();
       else window.addEventListener('load', hideLoader);
+
+      var burger = document.getElementById('burger');
+      var nav = document.getElementById('mainnav');
+      function closeMenu() {
+        nav.classList.remove('open');
+        burger.setAttribute('aria-expanded', 'false');
+        burger.setAttribute('aria-label', 'Apri il menu');
+      }
+      burger.addEventListener('click', function () {
+        var open = nav.classList.toggle('open');
+        burger.setAttribute('aria-expanded', String(open));
+        burger.setAttribute('aria-label', open ? 'Chiudi il menu' : 'Apri il menu');
+      });
+      nav.addEventListener('click', function (e) {
+        if (e.target.tagName === 'A') closeMenu();
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeMenu();
+      });
 
       if ('IntersectionObserver' in window) {
         var io = new IntersectionObserver(function (entries) {
